@@ -30,6 +30,14 @@ namespace EmployeeManagement.Repository
                     {
                         existingEmployee.Name = employee.Name;
                         existingEmployee.Designation = employee.Designation;
+                        existingEmployee.Email = employee.Email;
+                        existingEmployee.DOJ=employee.DOJ;
+                        existingEmployee.Gender = employee.Gender;
+                        existingEmployee.PhoneNumber = employee.PhoneNumber;
+                        existingEmployee.Salary = employee.Salary;
+                        existingEmployee.IsActive = employee.IsActive;
+                        existingEmployee.ModifiedBy = employee.ModifiedBy;
+                        existingEmployee.ModifiedOn = DateTimeOffset.Now;
                         await _DbContext.SaveChangesAsync();
                         return existingEmployee;
                     }

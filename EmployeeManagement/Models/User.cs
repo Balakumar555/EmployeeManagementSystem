@@ -1,0 +1,21 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace EmployeeManagement.Models
+{
+    [Table("tblUser")]
+    public class User : CommonLogs
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public string FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public string PasswordHash { get; set; }
+        public string PasswordSalt { get; set; }        
+        public Guid? RoleId { get; set; }
+        public DateTimeOffset? LastPasswordChangedOn { get; set; }
+        public bool? IsBlocked { get; set; }
+    }
+}

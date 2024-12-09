@@ -49,7 +49,7 @@ namespace EmployeeManagement.Repository
             // Update password if provided
             if (!string.IsNullOrEmpty(userRegistration.Password))
             {
-                var amplifyHashSalt = AmplifyHashSalt.GenerateSaltedHash(userRegistration.Password);
+                var amplifyHashSalt = PasswordGenerateHashSalt.GenerateSaltedHash(userRegistration.Password);
                 user.PasswordHash = amplifyHashSalt.Hash;
                 user.PasswordSalt = amplifyHashSalt.Salt;
                 user.LastPasswordChangedOn = DateTimeOffset.UtcNow;

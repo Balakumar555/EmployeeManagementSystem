@@ -3,6 +3,7 @@ using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
 using EmployeeManagement.Utility;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,10 +14,12 @@ namespace EmployeeManagement.Repository
     public class AuthenticationDataManager : IAuthenticationManager
     {
         private readonly ApplicationDBContext _dbContext;
-        private string _tokenKey = "JWTAuthenticationHIGHsecuredPasswordVVVp1OH7Xzyr";
-        public AuthenticationDataManager(ApplicationDBContext dbContext)
+        private string _tokenKey = string.Empty;
+        public AuthenticationDataManager(ApplicationDBContext dbContext, IConfiguration configuration)
         {
             this._dbContext = dbContext;
+            var jwtSection = configuration.GetSection("JWT");
+            _tokenKey = jwtSection["tokenKey"].ToString();
         }
         public async Task<AuthResponse> AuthenticateUserAsync(UserAuthentication authentication)
         {
@@ -128,12 +131,12 @@ namespace EmployeeManagement.Repository
                         {
                             Id = user.Id,
                             FirstName = user.FirstName,
-                            LastName = user.LastName,                           
+                            LastName = user.LastName,
                             Email = user.Email,
                             FullName = user.FirstName + "" + user.LastName,
                             Phone = user.Phone,
                             RoleId = user.RoleId,
-                            
+
                         };
                     }
 
@@ -146,5 +149,5 @@ namespace EmployeeManagement.Repository
             }
         }
     }
-    
+
 }

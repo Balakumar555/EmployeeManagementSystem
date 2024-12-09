@@ -16,5 +16,7 @@ namespace EmployeeManagement.DB_Configuration
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Employee> employees { get; set; }
+        public DbSet<FileDetails> FileDetails { get; set; }
+        public DbSet<User> users { get; set; }
     }
 }

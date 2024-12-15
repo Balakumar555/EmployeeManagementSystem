@@ -76,8 +76,7 @@ namespace EmployeeManagement.Repository
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-            new Claim(ClaimTypes.Email, user.Email), // Use user.Email or user.Id as needed
-            //new Claim(ClaimTypes.Role, user.RoleId.ToString())
+                  new Claim(ClaimTypes.Name, user.Email),
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
@@ -107,14 +106,16 @@ namespace EmployeeManagement.Repository
             {
                 ApplicationUser applicationUser = null;
 
-                var toeknKey = Encoding.ASCII.GetBytes(_tokenKey);
+                var tokenKey = Encoding.ASCII.GetBytes(_tokenKey);
                 var tokenHandler = new JwtSecurityTokenHandler();
                 SecurityToken securityToken;
-                var principle = tokenHandler.ValidateToken(auth.JwtToken,
+
+
+                var principal = tokenHandler.ValidateToken(auth.JwtToken,
                     new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(toeknKey),
+                        IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     }, out securityToken);
@@ -122,30 +123,32 @@ namespace EmployeeManagement.Repository
 
                 if (jwtTken != null && jwtTken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256))
                 {
-                    string username = principle.Identity.Name;
+                    var usernameClaim = principal.FindFirst(ClaimTypes.Name);
+                    string username = usernameClaim?.Value;
 
-                    var user = await _dbContext.users.SingleOrDefaultAsync(x => x.Email.ToLower().Trim() == username.ToLower().Trim() || x.Phone.Trim() == username.Trim());
-                    if (user != null)
+                    if (!string.IsNullOrEmpty(username))
                     {
-                        applicationUser = new ApplicationUser()
+                        var user = await _dbContext.users.SingleOrDefaultAsync(x => x.Email.ToLower().Trim() == username.ToLower().Trim() || x.Phone.Trim() == username.Trim());
+                        if (user != null)
                         {
-                            Id = user.Id,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            Email = user.Email,
-                            FullName = user.FirstName + "" + user.LastName,
-                            Phone = user.Phone,
-                            RoleId = user.RoleId,
-
-                        };
+                            applicationUser = new ApplicationUser()
+                            {
+                                Id = user.Id,
+                                FirstName = user.FirstName,
+                                LastName = user.LastName,
+                                Email = user.Email,
+                                FullName = user.FirstName + " " + user.LastName,
+                                Phone = user.Phone,
+                                RoleId = user.RoleId,
+                            };
+                        }
                     }
-
                 }
                 return applicationUser;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while generating user claims.", ex);
             }
         }
     }

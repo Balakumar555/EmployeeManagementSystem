@@ -102,6 +102,10 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IUserManager, UserDataManager>();
 builder.Services.AddScoped<IAuthenticationManager, AuthenticationDataManager>();
 builder.Services.AddScoped<IUserManager, UserDataManager>();
+builder.Services.AddScoped<IRoles, RolesReository>();
+builder.Services.AddScoped<IActivity, ActivityRepository>();
+builder.Services.AddScoped<IPermissions, PermissionRepository>();
+builder.Services.AddScoped<IFeature, FeatureRepository>();
 
 var app = builder.Build();
 

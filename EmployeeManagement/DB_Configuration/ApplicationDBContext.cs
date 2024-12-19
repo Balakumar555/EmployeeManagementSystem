@@ -1,7 +1,5 @@
 ﻿using EmployeeManagement.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Reflection.Emit;
 
 namespace EmployeeManagement.DB_Configuration
 {
@@ -18,5 +16,9 @@ namespace EmployeeManagement.DB_Configuration
         public DbSet<Employee> employees { get; set; }
         public DbSet<FileDetails> FileDetails { get; set; }
         public DbSet<User> users { get; set; }
+        public DbSet<Role> roles { get; set; }
+        public DbSet<Permission> permissions { get; set; }
+        public DbSet<Activity> activities { get; set; }
+        public DbSet<Feature> features { get; set; }
     }
 }

@@ -20,8 +20,15 @@ namespace EmployeeManagement.Controllers
         [Route("CreateUpdateActivity")]
         public async Task<ActionResult> CreateUpdate(Activity activity)
         {
-            var data = await _activity.CreateUpdate(activity);
-            return Ok(data);
+            try
+            {
+                var data = await _activity.CreateUpdate(activity);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
         [HttpGet]
         [Route("GetActivityById")]

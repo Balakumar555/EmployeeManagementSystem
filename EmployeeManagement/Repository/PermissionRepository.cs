@@ -16,25 +16,21 @@ namespace EmployeeManagement.Repository
             this._dbContext = dbContext;
         }
       
-        public bool HasPermissionCheckAsync(int roleId, string activity)
+        public bool HasPermissionCheckAsync(int roleId, string activity, string feature)
         {
             activity = activity.ToLower().Trim();
+            feature = feature.ToLower().Trim();
 
-            var hasPermission = _dbContext.permissions
-                .Where(x => x.RoleId == roleId && x.IsEnabled)
-                .Join(
-                    _dbContext.activities,
-                    permission => permission.ActivityId,
-                    activityEntity => activityEntity.ActivityId,
-                    (permission, activityEntity) => new { permission, activityEntity }
-                )
-                .Any(x => x.activityEntity.Name.ToLower().Trim() == activity);
+            var hasPermission= (from p in  _dbContext.permissions
+                                join f in _dbContext.features  on p.FeatureId equals f.FeatureId
+                                join a in _dbContext.activities on p.ActivityId equals a.ActivityId
+                                where p.RoleId== roleId && f.Name.ToLower().Trim() == feature && a.Name == activity.ToLower().Trim() && p.IsEnabled==true
+                                select p).Any();    
 
             return hasPermission;
         }
         public async Task<IEnumerable<Permission>> GetRolePermissionAsync(int roleId)
         {
-            //return await _dbContext.permissions.FindAsync(x => x.RoleId == roleId);
             return await _dbContext.permissions.Where(x => x.RoleId == roleId).ToListAsync();
         }
 
@@ -43,7 +39,7 @@ namespace EmployeeManagement.Repository
         {
             if (permission != null)
             {
-                if (permission.PermissionId == 0)
+                if (permission.Id == 0)
                 {
                     await _dbContext.AddAsync(permission);
                     await _dbContext.SaveChangesAsync();
@@ -51,11 +47,12 @@ namespace EmployeeManagement.Repository
                 }
                 else
                 {
-                    var existingpermission = await _dbContext.permissions.FindAsync(permission.PermissionId);
+                    var existingpermission = await _dbContext.permissions.FindAsync(permission.Id);
                     if (existingpermission != null)
                     {
                         existingpermission.RoleId = permission.RoleId;
                         existingpermission.ActivityId = permission.ActivityId;
+                        existingpermission.FeatureId = permission.FeatureId;
                         existingpermission.IsActive = permission.IsActive;
                         existingpermission.IsEnabled = permission.IsEnabled;
                         existingpermission.IsDisabled = permission.IsDisabled;

@@ -28,11 +28,11 @@ namespace EmployeeManagement.Controllers
             }
         }
         [HttpGet]
-        [Route("HasPermissionCheckAsync/{roleId}/{activity}")]
-        public ActionResult HasPermissionCheckAsync(int roleId, string activity)
+        [Route("HasPermissionCheckAsync/{roleId}/{activity}/{feature}")]
+        public ActionResult HasPermissionCheckAsync(int roleId, string activity, string feature)
         {
             
-            bool hasPermission =  _permissions.HasPermissionCheckAsync(roleId, activity);
+            bool hasPermission =  _permissions.HasPermissionCheckAsync(roleId, activity, feature);
            
             return Ok(hasPermission);
         }
@@ -41,8 +41,15 @@ namespace EmployeeManagement.Controllers
         [Route("InserOrUpdatePermissionsAsync")]
         public async Task<ActionResult<Permission>> InserOrUpdatePermissionsAsync(Permission permission)
         {
-            var data = await _permissions.InserOrUpdatePermissionsAsync(permission);
-            return Ok(data);
+            try
+            {
+                var data = await _permissions.InserOrUpdatePermissionsAsync(permission);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

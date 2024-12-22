@@ -6,21 +6,21 @@ namespace EmployeeManagement.Controllers
 
     public class BaseController : ControllerBase
     {
-        protected Guid? CurrentUser
+        protected int? CurrentUser
         {
             get
             {
                 var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
-                return !string.IsNullOrEmpty(userIdClaim?.Value) ? Guid.Parse(userIdClaim.Value) : (Guid?)null;
+                return !string.IsNullOrEmpty(userIdClaim?.Value) ? int.Parse(userIdClaim.Value) : (int?)null;
             }
         }
 
-        protected Guid? CurrentUserRole
+        protected int? CurrentUserRole
         {
             get
             {
                 var roleClaim = User.Claims.FirstOrDefault(c => c.Type == "role");
-                return !string.IsNullOrEmpty(roleClaim?.Value) ? Guid.Parse(roleClaim.Value) : null;
+                return !string.IsNullOrEmpty(roleClaim?.Value) ? int.Parse(roleClaim.Value) : null;
             }
         }
     }

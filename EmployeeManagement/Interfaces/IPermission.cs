@@ -7,7 +7,7 @@ namespace EmployeeManagement.Interfaces
         //Task<bool> IsGranted();
         //Task<bool> IsDenied();
 
-        bool HasPermissionCheckAsync(int roleId, string Activity);
+        bool HasPermissionCheckAsync(int roleId, string Activity, string feature);
         Task<IEnumerable<Permission>> GetRolePermissionAsync(int roleId);
         Task<Permission> InserOrUpdatePermissionsAsync(Permission permission);
 

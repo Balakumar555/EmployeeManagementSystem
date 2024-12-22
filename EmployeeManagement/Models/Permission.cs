@@ -7,9 +7,10 @@ namespace EmployeeManagement.Models
     public class Permission : CommonLogs
     {
         [Key]
-        public int PermissionId { get; set; }       
+        public int Id { get; set; }       
         public int? RoleId { get; set; }
         public int? ActivityId { get; set; }
+        public int? FeatureId { get; set; } 
         public bool IsEnabled { get; set; }
         public bool? IsDisabled { get; set; }
     }

@@ -1,6 +1,7 @@
 using EmployeeManagement.DB_Configuration;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Repository;
+using EmployeeManagement.Repository_Configuration;
 using EmployeeManagement.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -107,6 +108,8 @@ builder.Services.AddScoped<IRoles, RolesReository>();
 builder.Services.AddScoped<IActivity, ActivityRepository>();
 builder.Services.AddScoped<IPermissions, PermissionRepository>();
 builder.Services.AddScoped<IFeature, FeatureRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IAuditLogManager, AuditLogManager>();
 // adding middleware to DI Container
 builder.Services.AddTransient<FactoryMiddleware>();
 

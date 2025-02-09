@@ -20,5 +20,6 @@ namespace EmployeeManagement.DB_Configuration
         public DbSet<Permission> permissions { get; set; }
         public DbSet<Activity> activities { get; set; }
         public DbSet<Feature> features { get; set; }
+        public DbSet<AuditLog> auditLog { get; set; }   
     }
 }

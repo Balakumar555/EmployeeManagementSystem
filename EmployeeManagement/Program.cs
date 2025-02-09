@@ -1,6 +1,7 @@
 using EmployeeManagement.DB_Configuration;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Repository;
+using EmployeeManagement.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -102,6 +103,12 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IUserManager, UserDataManager>();
 builder.Services.AddScoped<IAuthenticationManager, AuthenticationDataManager>();
 builder.Services.AddScoped<IUserManager, UserDataManager>();
+builder.Services.AddScoped<IRoles, RolesReository>();
+builder.Services.AddScoped<IActivity, ActivityRepository>();
+builder.Services.AddScoped<IPermissions, PermissionRepository>();
+builder.Services.AddScoped<IFeature, FeatureRepository>();
+// adding middleware to DI Container
+builder.Services.AddTransient<FactoryMiddleware>();
 
 var app = builder.Build();
 
@@ -111,12 +118,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<FactoryMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("CorsPolicy");
-
 app.MapControllers();
-
 app.Run();

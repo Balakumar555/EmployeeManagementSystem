@@ -107,5 +107,14 @@ namespace EmployeeManagement.Repository
             throw new NotImplementedException();
         }
 
+        public async Task<Employee> GetEmployeeDetailsByEmail(string email)
+        {
+            var employees = await _DbContext.employees
+                    .FromSqlInterpolated($"EXEC [dbo].[usp_getEmployeeDetailsByEmail] {email}")
+                    .AsNoTracking()
+                    .ToListAsync();  // Materialize results first
+
+            return employees.FirstOrDefault();
+        }
     }
 }

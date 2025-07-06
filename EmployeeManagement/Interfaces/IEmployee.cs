@@ -10,5 +10,6 @@ namespace EmployeeManagement.Interfaces
         Task<List<Employee>> SearchEmployee(string Search);
         Task<bool> Delete(int employeeId);
         Task<bool> VerifyEmployee();
+        Task<Employee> GetEmployeeDetailsByEmail(string email);
     }
 }

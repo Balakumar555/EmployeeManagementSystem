@@ -114,7 +114,7 @@ builder.Services.AddScoped<IAuditLogManager, AuditLogManager>();
 builder.Services.AddTransient<FactoryMiddleware>();
 
 var app = builder.Build();
-
+//test
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

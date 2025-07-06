@@ -118,6 +118,21 @@ namespace EmployeeManagement.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetEmployeeDetailsByEmail/{email}")]
+        public async Task<ActionResult<Employee>> GetEmployeeDetailsByEmailAsync(string email)
+        {
+            try
+            {
+                var data = await _employee.GetEmployeeDetailsByEmail(email);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
 
 
     }

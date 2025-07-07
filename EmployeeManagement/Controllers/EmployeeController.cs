@@ -133,6 +133,20 @@ namespace EmployeeManagement.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("TotalEmployees")]
+        public async Task<ActionResult<int>> TotalEmployees()
+        {
+            try
+            {
+                var data = await _employee.GetEmployees();
+                return Ok(data.Count());
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
 
     }
